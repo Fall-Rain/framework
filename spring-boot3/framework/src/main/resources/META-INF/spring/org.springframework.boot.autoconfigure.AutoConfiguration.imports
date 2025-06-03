@@ -1,3 +1,5 @@
 com.framework.mybatis.TimeInterceptor
 com.framework.config.SecturyConfig
 com.framework.properties.SecurityProperties
+com.framework.properties.TokenProperties
+com.framework.utils.TokenUtils

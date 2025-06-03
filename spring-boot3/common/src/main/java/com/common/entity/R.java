@@ -25,9 +25,15 @@ public class R<T> implements Serializable {
         return new R().setCode(200).setSuccess(true).setMessage(message);
     }
 
+    public static <T> R ok(T objects, String message) {
+        return new R<T>().setCode(200).setSuccess(true).setResult(objects).setMessage(message);
+    }
+
     public static R error(Integer code, String message) {
         return new R().setCode(code).setMessage(message).setSuccess(false);
     }
+
+
 
     public static R error(String message) {
         return new R().setCode(500).setMessage(message).setSuccess(false);

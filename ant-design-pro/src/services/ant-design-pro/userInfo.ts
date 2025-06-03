@@ -69,3 +69,11 @@ export async function deleteUserInfo(id: string, options?: { [key: string]: any 
     ...(options || {}),
   });
 }
+export async function generatePassword(data: UserInfoEntity, options?: { [key: string]: any }){
+  return request<R>('/api/userInfo/generatePassword', {
+    method: 'PUT',
+    data,
+    ...(options || {}),
+  });
+}
+

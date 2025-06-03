@@ -46,4 +46,13 @@ public class UserInfoController {
         return R.ok(userInfoService.getById(id));
     }
 
+    @PutMapping("generatePassword")
+    public R generatePassword(@RequestBody UserInfoEntity userInfo) {
+        userInfoService.generatePassword(userInfo);
+        return R.ok("生成完成");
+    }
+
+    public R getUserInfo() {
+        return R.ok("");
+    }
 }

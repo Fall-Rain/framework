@@ -11,6 +11,7 @@ import {
   listUserInfo,
   saveUserInfo,
   updateUserInfo,
+  generatePassword
 } from '@/services/ant-design-pro/userInfo';
 import { Button, message, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
@@ -68,6 +69,12 @@ const UserList: React.FC = () => {
       render: (_, record) => [
         <a key="editable">编辑</a>,
         <a key="view">查看</a>,
+        <a key="generatePassword" onClick={async () => {
+          await generatePassword({
+            id: record.id
+          });
+          message.success('密码重置成功');
+        }}>重置密码</a>,
         <TableDropdown
           onSelect={(key) => {
             if (key === 'delete') {
