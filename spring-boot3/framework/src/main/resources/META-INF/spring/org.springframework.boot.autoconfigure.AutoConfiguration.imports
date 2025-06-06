@@ -2,4 +2,8 @@ com.framework.mybatis.TimeInterceptor
 com.framework.config.SecturyConfig
 com.framework.properties.SecurityProperties
 com.framework.properties.TokenProperties
+com.framework.properties.UploadProperties
 com.framework.utils.TokenUtils
+com.framework.utils.FileUtils
+com.framework.service.LocalFileService
+com.framework.exception.GlobalExceptionHandler
