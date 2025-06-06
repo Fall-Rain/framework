@@ -1,8 +1,7 @@
-package com.framework.token.Impl;
+package com.framework.token;
 
+import com.common.token.TokenService;
 import com.framework.properties.TokenProperties;
-import com.framework.token.TokenService;
-import com.framework.utils.TokenUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;

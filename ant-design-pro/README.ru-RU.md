@@ -41,9 +41,9 @@ UI-решение "из коробки" для корпоративных при
   - Analytic
   - Monitor
   - Workspace
-- Form
-  - Basic Form
-  - Step Form
+- UserListForm
+  - Basic UserListForm
+  - Step UserListForm
   - Advanced From
 - List
   - Standard Table

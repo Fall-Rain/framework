@@ -5,9 +5,10 @@ import type { Settings as LayoutSettings } from '@ant-design/pro-components';
 import { SettingDrawer } from '@ant-design/pro-components';
 import type { RunTimeLayoutConfig } from '@umijs/max';
 import { history, Link } from '@umijs/max';
-import React from 'react';
+import React, { Suspense } from 'react';
 import defaultSettings from '../config/defaultSettings';
 import { errorConfig } from './requestErrorConfig';
+import { getCurrentUserInfo } from '@/services/ant-design-pro/system';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
@@ -23,10 +24,11 @@ export async function getInitialState(): Promise<{
 }> {
   const fetchUserInfo = async () => {
     try {
-      const msg = await queryCurrentUser({
-        skipErrorHandler: true,
-      });
-      return msg.data;
+      const msg = await getCurrentUserInfo();
+      if (!msg.success) {
+        history.push(loginPath);
+      }
+      return msg.result;
     } catch (error) {
       history.push(loginPath);
     }
@@ -48,6 +50,47 @@ export async function getInitialState(): Promise<{
   };
 }
 
+// export async function patchClientRoutes({ routes }: any) {
+//   const menuList = [
+//     {
+//       path: '/account/center',
+//       name: '用户管理',
+//       component: '/account/center',
+//     },
+//     {
+//       path: '/account/settings',
+//       name: '角色管理',
+//       component: '/account/settings',
+//     },
+//   ];
+//
+//   function lazyLoadComponent(componentPath: string) {
+//     console.log('lazyLoadComponent', 'componentPath');
+//     const LazyComp = React.lazy(() => import(`@/pages${componentPath}`));
+//     return (
+//       <Suspense fallback={<div>加载中...</div>}>
+//         <LazyComp />
+//       </Suspense>
+//     );
+//   }
+//
+//   const layoutRoute = routes.find((r) => r.component?.includes('BasicLayout') || r.path === '/');
+//
+//   function addRoute(menu: { name: any; path: any; component: string; children?: any[] }) {
+//     layoutRoute.routes.push({
+//       id: menu.name,
+//       path: menu.path,
+//       element: lazyLoadComponent(menu.component),
+//     });
+//   }
+//
+//   console.log('加载路由');
+//   for (let menuListElement of menuList) {
+//     addRoute(menuListElement);
+//   }
+//   // menuList.forEach(addRoute);
+// }
+
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
   return {
@@ -56,7 +99,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
       src: initialState?.currentUser?.avatar,
       title: <AvatarName />,
       render: (_, avatarChildren) => {
-        return <AvatarDropdown>{avatarChildren}</AvatarDropdown>;
+        return <AvatarDropdown menu={true}>{avatarChildren}</AvatarDropdown>;
       },
     },
     waterMarkProps: {
@@ -90,6 +133,22 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
         width: '331px',
       },
     ],
+    // menu: {
+    //   request: async () => {
+    //     return [
+    //       {
+    //         name: '用户管理',
+    //         path: '/account/center',
+    //         icon: 'UserOutlined',
+    //       },
+    //       {
+    //         name: '角色管理',
+    //         path: '/account/settings',
+    //         icon: 'TeamOutlined',
+    //       },
+    //     ];
+    //   },
+    // },
     links: isDev
       ? [
           <Link key="openapi" to="/umi/plugin/openapi" target="_blank">

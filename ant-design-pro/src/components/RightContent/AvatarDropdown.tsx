@@ -64,14 +64,23 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu, childre
 
   const onMenuClick: MenuProps['onClick'] = (event) => {
     const { key } = event;
-    if (key === 'logout') {
-      flushSync(() => {
-        setInitialState((s) => ({ ...s, currentUser: undefined }));
-      });
-      loginOut();
-      return;
+
+    switch (key) {
+      case 'logout':
+        flushSync(() => {
+          setInitialState((s) => ({ ...s, currentUser: undefined }));
+        });
+        loginOut();
+        return;
+      case 'center':
+        history.push('/account/center');
+        break;
+      case 'settings':
+        history.push('/account/settings');
+        break;
     }
-    history.push(`/account/${key}`);
+    //
+    // history.push(`/account/${key}`);
   };
 
   const loading = (
@@ -93,6 +102,7 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu, childre
   const { currentUser } = initialState;
 
   if (!currentUser || !currentUser.name) {
+    console.log('currentUser====>', currentUser);
     return loading;
   }
 
@@ -104,11 +114,11 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu, childre
             icon: <UserOutlined />,
             label: '个人中心',
           },
-          {
-            key: 'settings',
-            icon: <SettingOutlined />,
-            label: '个人设置',
-          },
+          // {
+          //   key: 'settings',
+          //   icon: <SettingOutlined />,
+          //   label: '个人设置',
+          // },
           {
             type: 'divider' as const,
           },

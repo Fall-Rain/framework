@@ -1,6 +1,7 @@
 ﻿import type { RequestOptions } from '@@/plugin-request/request';
 import type { RequestConfig } from '@umijs/max';
 import { message, notification } from 'antd';
+import { history, Link } from '@umijs/max';
 
 // 错误处理方案： 错误类型
 enum ErrorShowType {
@@ -10,15 +11,17 @@ enum ErrorShowType {
   NOTIFICATION = 3,
   REDIRECT = 9,
 }
+
 // 与后端约定的响应数据格式
 interface ResponseStructure {
+  code: number;
   success: boolean;
-  data: any;
-  errorCode?: number;
-  errorMessage?: string;
-  showType?: ErrorShowType;
+  result: any;
+  message?: string;
 }
 
+const loginPath = '/user/login';
+// @ts-ignore
 /**
  * @name 错误处理
  * pro 自带的错误处理， 可以在这里做自己的改动
@@ -28,13 +31,19 @@ export const errorConfig: RequestConfig = {
   // 错误处理： umi@3 的错误处理方案。
   errorConfig: {
     // 错误抛出
-    errorThrower: (res) => {
-      const { success, data, errorCode, errorMessage, showType } =
-        res as unknown as ResponseStructure;
-      if (!success) {
-        const error: any = new Error(errorMessage);
+    errorThrower: (res: ResponseStructure) => {
+      const { code, success, result, message } = res as unknown as ResponseStructure;
+      if (code === 401) {
+        localStorage.removeItem('token');
+        history.push(loginPath);
+        // message.warning('无效的会话，或者会话已过期，请重新登录。');
+        console.log('无效的会话，或者会话已过期，请重新登录。')
+        return;
+      }
+      if (!res.success) {
+        const error: any = new Error(res.message);
         error.name = 'BizError';
-        error.info = { errorCode, errorMessage, showType, data };
+        error.info = { code, success, result, message };
         throw error; // 抛出自制的错误
       }
     },
@@ -44,29 +53,21 @@ export const errorConfig: RequestConfig = {
       // 我们的 errorThrower 抛出的错误。
       if (error.name === 'BizError') {
         const errorInfo: ResponseStructure | undefined = error.info;
+        // console.log('errorInfo==>',errorInfo)
         if (errorInfo) {
-          const { errorMessage, errorCode } = errorInfo;
-          switch (errorInfo.showType) {
-            case ErrorShowType.SILENT:
+          switch (errorInfo.code) {
+            case 500:
               // do nothing
+              message.error(error.message);
               break;
-            case ErrorShowType.WARN_MESSAGE:
-              message.warning(errorMessage);
-              break;
-            case ErrorShowType.ERROR_MESSAGE:
-              message.error(errorMessage);
-              break;
-            case ErrorShowType.NOTIFICATION:
-              notification.open({
-                description: errorMessage,
-                message: errorCode,
-              });
-              break;
-            case ErrorShowType.REDIRECT:
-              // TODO: redirect
+            case 401:
+              // console.log('无效的会话，或者会话已过期，请重新登录。')
+              localStorage.removeItem('token');
+              history.push(loginPath);
+              message.warning('无效的会话，或者会话已过期，请重新登录。');
               break;
             default:
-              message.error(errorMessage);
+              message.error(error.message);
           }
         }
       } else if (error.response) {
@@ -87,22 +88,21 @@ export const errorConfig: RequestConfig = {
 
   // 请求拦截器
   requestInterceptors: [
-    (config: RequestOptions) => {
-      // 拦截请求配置，进行个性化处理。
-      const url = config?.url?.concat('?token = 123');
-      return { ...config, url };
+    async (config: RequestOptions) => {
+      const token = localStorage.getItem('token');
+      return {
+        ...config,
+        headers: {
+          ...config.headers,
+          ...(token ? { Authorization: token } : {}),
+        },
+      };
     },
   ],
 
   // 响应拦截器
   responseInterceptors: [
     (response) => {
-      // 拦截响应数据，进行个性化处理
-      const { data } = response as unknown as ResponseStructure;
-
-      if (data?.success === false) {
-        message.error('请求失败！');
-      }
       return response;
     },
   ],

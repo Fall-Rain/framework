@@ -23,6 +23,7 @@ public class UserInfoEntity implements UserDetails {
     private String password;
 
     private String phone;
+    private String name;
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;

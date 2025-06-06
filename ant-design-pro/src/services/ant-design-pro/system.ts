@@ -26,3 +26,19 @@ export async function login(data: UserInfoEntity, options?: { [key: string]: any
     ...(options || {}),
   });
 }
+
+/** 获取当前登录用户信息 */
+export async function getCurrentUserInfo() {
+  return request<R>(`/api/system/getUserInfo`, {
+    method: 'GET',
+  });
+}
+
+export async function upload(file:File){
+  const formData = new FormData();
+  formData.append('file', file);
+  return request<R>('/api/system/upload', {
+    method: 'POST',
+    data: formData
+  })
+}

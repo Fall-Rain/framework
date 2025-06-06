@@ -2,7 +2,7 @@ package com.admin.userInfo.serviceImpl;
 
 import com.admin.userInfo.response.LoginUserResponse;
 import com.admin.userInfo.service.IUserInfoService;
-import com.framework.token.Impl.AbstractTokenLoadUserService;
+import com.framework.token.AbstractTokenLoadUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

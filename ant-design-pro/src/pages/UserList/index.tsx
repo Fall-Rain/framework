@@ -11,12 +11,13 @@ import {
   listUserInfo,
   saveUserInfo,
   updateUserInfo,
-  generatePassword
+  generatePassword,
 } from '@/services/ant-design-pro/userInfo';
 import { Button, message, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import Form from '@/pages/UserList/components/Form';
+import UserListForm from '@/pages/UserList/components/UserListForm';
 import { useRef, useState } from 'react';
+
 const { confirm } = Modal;
 
 const UserList: React.FC = () => {
@@ -24,6 +25,8 @@ const UserList: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [editData, setEditData] = useState<any>(null);
   const [title, setTitle] = useState('');
+
+  const [readOnly,setReadOnly] = useState(false);
 
   const handleDelete = (id) => {
     confirm({
@@ -41,13 +44,17 @@ const UserList: React.FC = () => {
   };
 
   const columns: ProColumns<API.RuleListItem>[] = [
+    // {
+    //   title: 'id',
+    //   dataIndex: 'id',
+    // },
     {
-      title: 'id',
-      dataIndex: 'id',
+      title: '登录名',
+      dataIndex: 'username',
     },
     {
-      title: '名字',
-      dataIndex: 'username',
+      title: '用户名',
+      dataIndex: 'name',
     },
     {
       title: '手机号',
@@ -67,14 +74,36 @@ const UserList: React.FC = () => {
       title: '操作',
       valueType: 'option',
       render: (_, record) => [
-        <a key="editable">编辑</a>,
-        <a key="view">查看</a>,
-        <a key="generatePassword" onClick={async () => {
-          await generatePassword({
-            id: record.id
-          });
-          message.success('密码重置成功');
-        }}>重置密码</a>,
+        <a
+          key="editable"
+          onClick={() => {
+            setModalVisible(true);
+            setEditData(record);
+            setTitle('修改用户');
+            setReadOnly(false)
+          }}
+        >
+          编辑
+        </a>,
+        <a key="view" onClick={() => {
+          setModalVisible(true);
+          setEditData(record);
+          setTitle('查看用户');
+          setReadOnly(true)
+        }}>
+          查看
+        </a>,
+        <a
+          key="generatePassword"
+          onClick={async () => {
+            await generatePassword({
+              id: record.id,
+            });
+            message.success('密码重置成功');
+          }}
+        >
+          重置密码
+        </a>,
         <TableDropdown
           onSelect={(key) => {
             if (key === 'delete') {
@@ -120,6 +149,7 @@ const UserList: React.FC = () => {
               setEditData(null);
               setModalVisible(true);
               setTitle('新建用户');
+              setReadOnly(false)
             }}
             icon={<PlusOutlined />}
           >
@@ -127,11 +157,12 @@ const UserList: React.FC = () => {
           </Button>,
         ]}
       ></ProTable>
-      <Form
+      <UserListForm
         visible={modalVisible}
         onVisibleChange={setModalVisible}
         initialValues={editData}
         title={title}
+        readOnly={readOnly}
         onSubmit={async (values) => {
           const isEdit = !!values.id;
           console.log(values);
@@ -145,7 +176,7 @@ const UserList: React.FC = () => {
           setModalVisible(false);
           actionRef.current?.reload();
         }}
-      ></Form>
+      ></UserListForm>
     </PageContainer>
   );
 };

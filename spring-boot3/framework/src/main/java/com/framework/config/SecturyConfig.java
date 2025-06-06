@@ -1,9 +1,11 @@
 package com.framework.config;
 
+import com.alibaba.fastjson2.JSONObject;
+import com.common.entity.R;
+import com.common.token.TokenService;
 import com.framework.properties.SecurityProperties;
 import com.framework.properties.TokenProperties;
-import com.framework.token.Impl.TokenServiceImpl;
-import com.framework.token.TokenService;
+import com.framework.token.TokenServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.ApplicationContext;
@@ -18,13 +20,13 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
+import org.springframework.security.config.annotation.web.configurers.ExceptionHandlingConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.util.List;
 
@@ -55,6 +57,26 @@ public class SecturyConfig {
     }
 
     @Bean
+    @ConditionalOnMissingBean
+    public ExceptionHandlingConfigurer<HttpSecurity> exceptionHandlingConfigurer() {
+        ExceptionHandlingConfigurer<HttpSecurity> httpSecurityExceptionHandlingConfigurer = new ExceptionHandlingConfigurer<>();
+        httpSecurityExceptionHandlingConfigurer
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.setStatus(200);
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().print(JSONObject.toJSONString(R.error(401, authException.getMessage())));
+                }).accessDeniedHandler((request, response, authException) -> {
+                    response.setStatus(200);
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().print(JSONObject.toJSONString(R.error(403, authException.getMessage())));
+                });
+        return httpSecurityExceptionHandlingConfigurer;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
     public AuthorizeHttpRequestsConfigurer<HttpSecurity> authorizeHttpRequestsConfigurer() {
         AuthorizeHttpRequestsConfigurer<HttpSecurity> httpSecurityAuthorizeHttpRequestsConfigurer = new AuthorizeHttpRequestsConfigurer<>(applicationContext);
         httpSecurityAuthorizeHttpRequestsConfigurer.getRegistry().anyRequest().permitAll();

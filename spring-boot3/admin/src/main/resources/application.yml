@@ -1,4 +1,8 @@
 spring:
+  servlet:
+    multipart:
+      max-file-size: 1GB
+      max-request-size: 1GB
   main:
     allow-bean-definition-overriding: true
   autoconfigure:
@@ -75,3 +79,8 @@ logging:
     java.sql.Connection: DEBUG
     java.sql.Statement: DEBUG
     java.sql.PreparedStatement: DEBUG
+upload:
+  upload-type: local
+  local:
+    path: D:\file
+    url:

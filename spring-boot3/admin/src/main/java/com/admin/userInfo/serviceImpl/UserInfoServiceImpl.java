@@ -7,7 +7,6 @@ import com.admin.userInfo.entity.UserInfoEntity;
 import com.admin.userInfo.mapper.UserInfoMapper;
 import com.admin.userInfo.service.IUserInfoService;
 import com.framework.properties.TokenProperties;
-import com.framework.token.TokenLoadUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

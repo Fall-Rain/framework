@@ -1,4 +1,4 @@
-package com.framework.token;
+package com.common.token;
 
 public interface TokenLoadUserService<T> {
     Class<T> getUserType();

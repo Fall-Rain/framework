@@ -1,6 +1,6 @@
-package com.framework.token.Impl;
+package com.framework.token;
 
-import com.framework.token.TokenLoadUserService;
+import com.common.token.TokenLoadUserService;
 
 import java.lang.reflect.ParameterizedType;
 

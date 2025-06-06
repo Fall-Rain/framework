@@ -61,6 +61,25 @@ export default [
     path: '/',
     redirect: '/welcome',
   },
+  // {
+  //   path: '/account',
+  //   routes: [
+  //     { path: '/account/center', component: './account/center' },
+  //     { path: '/account/settings', component: './account/settings' },
+  //   ],
+  // },
+  {
+    path: 'tool',
+    name: '系统工具',
+    icon: 'smile',
+    routes: [
+      {
+        path: '/tool/gen',
+        name: '代码生成',
+        component: './tool/gen',
+      },
+    ],
+  },
   {
     path: '*',
     layout: false,

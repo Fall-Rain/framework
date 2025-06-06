@@ -1,7 +1,7 @@
 package com.framework.utils;
 
-import com.framework.token.TokenLoadUserService;
-import com.framework.token.TokenService;
+import com.common.token.TokenLoadUserService;
+import com.common.token.TokenService;
 import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Map;

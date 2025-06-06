@@ -6,7 +6,7 @@
 
 
     <select id="selectById" resultType="com.admin.userInfo.response.LoginUserResponse">
-        SELECT id, username, password, phone, create_time, update_time
+        SELECT id, username, password, phone, create_time, update_time,name
         FROM user_info
         WHERE id = #{id}
     </select>
