@@ -12,7 +12,7 @@ public class SecturyConfig {
     public AuthorizeHttpRequestsConfigurer<HttpSecurity> authorizeHttpRequestsConfigurer(ApplicationContext applicationContext) {
         AuthorizeHttpRequestsConfigurer<HttpSecurity> httpSecurityAuthorizeHttpRequestsConfigurer = new AuthorizeHttpRequestsConfigurer<>(applicationContext);
         httpSecurityAuthorizeHttpRequestsConfigurer.getRegistry()
-                .requestMatchers("/system/login").permitAll()
+                .requestMatchers("/system/login","upload/**").permitAll()
                 .requestMatchers("/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**", "/druid/**").permitAll()
                 .anyRequest().authenticated();
         return httpSecurityAuthorizeHttpRequestsConfigurer;

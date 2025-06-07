@@ -6,8 +6,14 @@
 
 
     <select id="selectById" resultType="com.admin.userInfo.response.LoginUserResponse">
-        SELECT id, username, password, phone, create_time, update_time,name
+        SELECT id, username,avatar, password, phone, create_time, update_time,name
         FROM user_info
         WHERE id = #{id}
+    </select>
+
+    <select id="selectByUsername" resultType="com.admin.userInfo.entity.UserInfoEntity">
+        SELECT *
+        FROM user_info
+        WHERE username = #{username}
     </select>
 </mapper>

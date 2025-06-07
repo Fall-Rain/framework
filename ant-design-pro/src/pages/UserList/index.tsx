@@ -26,9 +26,9 @@ const UserList: React.FC = () => {
   const [editData, setEditData] = useState<any>(null);
   const [title, setTitle] = useState('');
 
-  const [readOnly,setReadOnly] = useState(false);
+  const [readOnly, setReadOnly] = useState(false);
 
-  const handleDelete = (id) => {
+  const handleDelete = (id: string) => {
     confirm({
       title: '确认删除',
       content: '删除后数据无法恢复，请谨慎操作。',
@@ -43,7 +43,7 @@ const UserList: React.FC = () => {
     });
   };
 
-  const columns: ProColumns<API.RuleListItem>[] = [
+  const columns: ProColumns[] = [
     // {
     //   title: 'id',
     //   dataIndex: 'id',
@@ -75,23 +75,26 @@ const UserList: React.FC = () => {
       valueType: 'option',
       render: (_, record) => [
         <a
+          key="view"
+          onClick={() => {
+            setModalVisible(true);
+            setEditData(record);
+            setTitle('查看用户');
+            setReadOnly(true);
+          }}
+        >
+          查看
+        </a>,
+        <a
           key="editable"
           onClick={() => {
             setModalVisible(true);
             setEditData(record);
             setTitle('修改用户');
-            setReadOnly(false)
+            setReadOnly(false);
           }}
         >
           编辑
-        </a>,
-        <a key="view" onClick={() => {
-          setModalVisible(true);
-          setEditData(record);
-          setTitle('查看用户');
-          setReadOnly(true)
-        }}>
-          查看
         </a>,
         <a
           key="generatePassword"
@@ -104,23 +107,17 @@ const UserList: React.FC = () => {
         >
           重置密码
         </a>,
-        <TableDropdown
-          onSelect={(key) => {
-            if (key === 'delete') {
-              console.log('删除', record);
-              handleDelete(record.id);
-            }
+        <a
+          key={'delete'}
+          onClick={() => {
+            handleDelete(record.id);
           }}
-          key="actionGroup"
-          menus={[
-            { key: 'copy', name: '复制' },
-            { key: 'delete', name: '删除' },
-          ]}
-        />,
+        >
+          删除
+        </a>,
       ],
     },
   ];
-
   return (
     <PageContainer>
       <ProTable<API.RuleListItem, API.PageParams>
@@ -149,7 +146,7 @@ const UserList: React.FC = () => {
               setEditData(null);
               setModalVisible(true);
               setTitle('新建用户');
-              setReadOnly(false)
+              setReadOnly(false);
             }}
             icon={<PlusOutlined />}
           >

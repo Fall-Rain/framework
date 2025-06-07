@@ -39,6 +39,17 @@ const UserListForm: React.FC<UserListFormProps> = ({
         render: (_, dom) => (readOnly ? null : dom), // 只读时隐藏提交按钮
       }}
     >
+      <Form.Item
+        label={'头像'}
+        name={'avatar'}
+        valuePropName={'value'}
+        getValueFromEvent={(val) => val}
+      >
+        <AvatarUpload
+          type={'avatar'}
+          disabled={readOnly}
+        />
+      </Form.Item>
       <ProFormText disabled={readOnly} name="id" hidden />
       <ProFormText
         disabled={readOnly}
@@ -47,16 +58,7 @@ const UserListForm: React.FC<UserListFormProps> = ({
         rules={[{ required: true }]}
       />
       <ProFormText disabled={readOnly} name="phone" label="手机号" />
-      <Form.Item
-        label={'头像'}
-        name={'avatar'}
-        valuePropName={'value'}
-        getValueFromEvent={(val) => val}
-      >
-        <AvatarUpload
-          disabled={readOnly}
-        />
-      </Form.Item>
+
     </ModalForm>
   );
 };

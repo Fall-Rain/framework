@@ -7,3 +7,4 @@ com.framework.utils.TokenUtils
 com.framework.utils.FileUtils
 com.framework.service.LocalFileService
 com.framework.exception.GlobalExceptionHandler
+com.framework.config.WebConfig

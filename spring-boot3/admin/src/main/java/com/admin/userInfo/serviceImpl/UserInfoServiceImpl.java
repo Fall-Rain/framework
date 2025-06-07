@@ -22,7 +22,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfoEnt
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return this.getOne(Wrappers.<UserInfoEntity>lambdaQuery().eq(UserInfoEntity::getUsername, username));
+        return baseMapper.selectByUsername(username);
     }
 
     @Override

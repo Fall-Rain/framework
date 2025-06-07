@@ -19,11 +19,12 @@ public class UserInfoEntity implements UserDetails {
     private String id;
 
     private String username;
-
+    @TableField(exist = false)
     private String password;
 
     private String phone;
     private String name;
+    private String avatar;
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;

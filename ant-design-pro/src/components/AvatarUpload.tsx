@@ -38,7 +38,7 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({
 
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
-
+  const isAvatar = type === 'avatar';
   useEffect(() => {
     if (isMultiple && Array.isArray(value)) {
       setFileList(
@@ -148,10 +148,10 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({
   );
 
   return (
-    <PageContainer>
+    <>
       <Upload
         onPreview={handlePreview}
-        listType="picture-card"
+        listType={isAvatar ? 'picture-circle' : 'picture-card'}
         accept={accept}
         fileList={fileList}
         onRemove={handleRemove}
@@ -200,7 +200,7 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({
           src={previewImage}
         />
       )}
-    </PageContainer>
+    </>
   );
 };
 

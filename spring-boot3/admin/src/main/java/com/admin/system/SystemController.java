@@ -7,8 +7,10 @@ import com.framework.utils.FileUtils;
 import com.framework.utils.TokenUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,10 +24,15 @@ public class SystemController {
 
     @PostMapping("login")
     public R login(@RequestBody UserInfoEntity userInfoEntity) {
-        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userInfoEntity.getUsername(), userInfoEntity.getPassword()));
-        UserInfoEntity loginUser = (UserInfoEntity) authenticate.getPrincipal();
-        String token = TokenUtils.generateSystemToken(loginUser.getId());
-        return R.ok(token, "登录成功");
+        try {
+            Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userInfoEntity.getUsername(), userInfoEntity.getPassword()));
+            UserInfoEntity loginUser = (UserInfoEntity) authenticate.getPrincipal();
+            String token = TokenUtils.generateSystemToken(loginUser.getId());
+            return R.ok(token, "登录成功");
+        }catch (AuthenticationException e) {
+            return R.error(e.getMessage());
+        }
+
     }
 
     @GetMapping("getUserInfo")
@@ -35,6 +42,6 @@ public class SystemController {
 
     @PostMapping("upload")
     public R upload(@RequestParam("file") MultipartFile file) throws IOException {
-        return FileUtils.upload(file.getInputStream(), "", "");
+        return FileUtils.upload(file.getInputStream(), file.getOriginalFilename(), "upload");
     }
 }
