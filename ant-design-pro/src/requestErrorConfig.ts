@@ -2,6 +2,7 @@
 import type { RequestConfig } from '@umijs/max';
 import { message, notification } from 'antd';
 import { history, Link } from '@umijs/max';
+import { stringify } from 'querystring';
 
 // 错误处理方案： 错误类型
 enum ErrorShowType {
@@ -35,9 +36,14 @@ export const errorConfig: RequestConfig = {
       const { code, success, result, message } = res as unknown as ResponseStructure;
       if (code === 401) {
         localStorage.removeItem('token');
-        history.push(loginPath);
+        const { pathname, search } = history.location;
+        const redirect = pathname + search;
+        history.push({
+          pathname: loginPath,
+          search: stringify({ redirect }),
+        });
         // message.warning('无效的会话，或者会话已过期，请重新登录。');
-        console.log('无效的会话，或者会话已过期，请重新登录。')
+        console.log('无效的会话，或者会话已过期，请重新登录。');
         return;
       }
       if (!res.success) {
