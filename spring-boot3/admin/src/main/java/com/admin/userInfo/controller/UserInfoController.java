@@ -52,7 +52,5 @@ public class UserInfoController {
         return R.ok("生成完成");
     }
 
-    public R getUserInfo() {
-        return R.ok("");
-    }
+
 }

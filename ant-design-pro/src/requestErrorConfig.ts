@@ -66,6 +66,9 @@ export const errorConfig: RequestConfig = {
               // do nothing
               message.error(error.message);
               break;
+            case 404:
+              message.warning(error.message);
+              break;
             case 401:
               // console.log('无效的会话，或者会话已过期，请重新登录。')
               localStorage.removeItem('token');

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @RestControllerAdvice
 @Slf4j
@@ -29,6 +30,11 @@ public class GlobalExceptionHandler {
         return R.error("服务器内部错误");
     }
 
+    @ExceptionHandler(NoResourceFoundException.class)
+    public R handleNoResourceFoundException(NoResourceFoundException e) {
+        log.error("找不到路径", e);
+        return R.error(404, "找不到路径");
+    }
 
 
 }

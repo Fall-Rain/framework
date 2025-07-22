@@ -1,4 +1,4 @@
-package com.admin.userInfo.serviceImpl;
+package com.admin.userInfo.service.impl;
 
 import com.admin.userInfo.response.LoginUserResponse;
 import com.admin.userInfo.service.IUserInfoService;

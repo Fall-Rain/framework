@@ -1,4 +1,4 @@
-package com.admin.userInfo.serviceImpl;
+package com.admin.userInfo.service.impl;
 
 import com.admin.userInfo.response.LoginUserResponse;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -33,6 +33,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfoEnt
 
     @Override
     public LoginUserResponse getById(String id) {
-        return baseMapper.selectById(id);
+        LoginUserResponse loginUserResponse = baseMapper.selectById(id);
+        return loginUserResponse;
     }
 }

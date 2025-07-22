@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button, Input, message, Modal, Upload, UploadProps } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
+import { createGenTable } from '@/services/ant-design-pro/genTable';
 
 const SqlParseModal: React.FC<{
   visible: boolean;
@@ -15,21 +16,16 @@ const SqlParseModal: React.FC<{
 
     setLoading(true);
     try {
-      const res = await fetch('/api/gen/parse-sql', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sql }),
+      createGenTable({
+        sql: sql,
+      }).then((res) => {
+        if (res.success) {
+          setLoading(false);
+          message.success(res.message);
+          onParsed(res);
+        }
       });
-      const result = await res.json();
-
-      if (result.success) {
-        onParsed(result.data); // 回传数据
-        message.success('解析成功');
-        onCancel();
-      } else {
-        message.error(result.message || '解析失败');
-      }
-    } catch (e) {
+    } catch (res) {
       message.error('解析出错');
     } finally {
       setLoading(false);

@@ -13,7 +13,7 @@ import {
   updateUserInfo,
   generatePassword,
 } from '@/services/ant-design-pro/userInfo';
-import { Button, message, Modal } from 'antd';
+import { Button, message, Modal, Popconfirm } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import UserListForm from '@/pages/UserList/components/UserListForm';
 import { useRef, useState } from 'react';
@@ -107,14 +107,29 @@ const UserList: React.FC = () => {
         >
           重置密码
         </a>,
-        <a
-          key={'delete'}
-          onClick={() => {
-            handleDelete(record.id);
+        // <a
+        //   key={'delete'}
+        //   onClick={() => {
+        //     handleDelete(record.id);
+        //   }}
+        // >
+        //   删除
+        // </a>,
+        <Popconfirm
+          key="delete"
+          title="确认删除该记录？"
+          description="删除后数据将无法恢复，是否继续？"
+          okText="确认"
+          cancelText="取消"
+          onConfirm={() => {
+            deleteUserInfo(record.id).then((e) => {
+              message.success(e.message);
+              actionRef.current?.reload();
+            });
           }}
         >
-          删除
-        </a>,
+          <a>删除</a>
+        </Popconfirm>
       ],
     },
   ];

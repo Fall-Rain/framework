@@ -52,6 +52,18 @@ export default [
     component: './UserList',
   },
   {
+    name: '权限管理',
+    path: 'permission',
+    icon: 'smile',
+    routes: [
+      {
+        path: '/permission/roleList',
+        name: '角色管理',
+        component: './permission/roleList',
+      },
+    ],
+  },
+  {
     name: 'list.table-list',
     icon: 'table',
     path: '/list',
@@ -61,13 +73,13 @@ export default [
     path: '/',
     redirect: '/welcome',
   },
-  // {
-  //   path: '/account',
-  //   routes: [
-  //     { path: '/account/center', component: './account/center' },
-  //     { path: '/account/settings', component: './account/settings' },
-  //   ],
-  // },
+  {
+    path: '/account',
+    routes: [
+      { path: '/account/center', component: './account/center' },
+      { path: '/account/settings', component: './account/settings' },
+    ],
+  },
   {
     path: 'tool',
     name: '系统工具',
