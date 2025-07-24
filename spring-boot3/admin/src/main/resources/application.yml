@@ -74,7 +74,7 @@ mybatis-plus:
   mapper-locations: classpath*:com/admin/**/mapper/xml/*Mapper.xml
 logging:
   level:
-    com.nei_jing_net.mapper: DEBUG
+    com.admin: DEBUG
     com.apache.ibatis: TRACE
     java.sql.Connection: DEBUG
     java.sql.Statement: DEBUG

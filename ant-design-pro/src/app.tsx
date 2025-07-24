@@ -18,6 +18,7 @@ const loginPath = '/user/login';
 export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
   currentUser?: API.CurrentUser;
+  roles?: string[];
   loading?: boolean;
   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
 }> {
@@ -37,9 +38,11 @@ export async function getInitialState(): Promise<{
   const { location } = history;
   if (location.pathname !== loginPath) {
     const currentUser = await fetchUserInfo();
+    const roles = currentUser?.roleCodes || [];
     return {
       fetchUserInfo,
       currentUser,
+      roles,
       settings: defaultSettings as Partial<LayoutSettings>,
     };
   }

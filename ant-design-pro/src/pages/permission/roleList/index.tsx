@@ -3,8 +3,7 @@ import { useRef, useState } from 'react';
 import { Button, message, Popconfirm, Tag } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import RoleListForm from '@/pages/permission/roleList/compoents/RoleListForm';
-import { deleteRole, listRole, saveRole, updateRole } from '@/services/ant-design-pro/role';
-import { deleteUserInfo, generatePassword } from '@/services/ant-design-pro/userInfo';
+import { deleteSysRole, listSysRole, saveSysRole, updateSysRole } from '@/services/ant-design-pro/sysRole';
 
 
 
@@ -87,7 +86,7 @@ const RoleList: React.FC = () => {
           okText="确认"
           cancelText="取消"
           onConfirm={() => {
-            deleteRole(record.id).then((e) => {
+            deleteSysRole(record.id).then((e) => {
               message.success(e.message);
               actionRef.current?.reload();
             });
@@ -121,7 +120,7 @@ const RoleList: React.FC = () => {
           </Button>,
         ]}
         request={async (params) => {
-          return listRole({
+          return listSysRole({
             arg0: {},
             pageNo: params.current || 1,
             pageSize: params.pageSize || 10,
@@ -142,11 +141,11 @@ const RoleList: React.FC = () => {
         onSubmit={async (data) => {
           console.log(data);
           if (!!data.id) {
-            await updateRole(data);
+            await updateSysRole(data);
             message.success('更新成功');
 
           } else {
-            await saveRole(data);
+            await saveSysRole(data);
             message.success('新增成功');
           }
           setModalVisible(false);

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.admin.sysUser.mapper.SysUserMapper">
+    <resultMap id="loginUserResponseMap" type="com.admin.sysUser.response.LoginUserResponse">
+        <result column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="avatar" property="avatar"/>
+        <result column="phone" property="phone"/>
+        <result column="name" property="name"/>
+        <collection property="roleCodes" ofType="java.lang.String">
+            <result column="code"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectLoginUserById" resultMap="loginUserResponseMap">
+        SELECT user.id,
+               user.username,
+               user.avatar,
+               user.phone,
+               user.name,
+               role.code
+        FROM sys_user user
+                 LEFT JOIN sys_user_role userRole on user.id = userRole.user_id
+                 LEFT JOIN sys_role role on userRole.role_id = role.id
+        WHERE user.id = #{id}
+    </select>
+
+    <select id="selectByUsername" resultType="com.admin.sysUser.entity.SysUser">
+        SELECT *
+        FROM sys_user
+        WHERE username = #{username}
+    </select>
+
+
+    <select id="selectAll" resultType="com.admin.sysUser.response.SysUserResponse">
+        SELECT user.id,
+               user.username,
+               user.password,
+               user.phone,
+               user.create_time,
+               user.update_time,
+               user.name,
+               user.avatar,
+               (SELECT GROUP_CONCAT(role_id SEPARATOR ',') FROM sys_user_role WHERE user_id = user.id) as roleIds
+        FROM sys_user user
+    </select>
+</mapper>

@@ -46,10 +46,10 @@ export default [
     ],
   },
   {
-    path: '/userList',
+    path: '/sysUser',
     name: '用户列表',
     icon: 'smile',
-    component: './UserList',
+    component: './SysUser',
   },
   {
     name: '权限管理',
